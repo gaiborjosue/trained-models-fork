@@ -47,7 +47,7 @@ jobs:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
       run: |
-          cd ${{ steps.read_dockerfile_path.outputs.dockerfile_path }}
-          docker build -t ${{ steps.set_image_name.outputs.image_name }} .
+          cd ${{ env.dockerfile_path }}
+          docker build -t ${{ env.image_name }} .
           docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-          docker push ${{ steps.set_image_name.outputs.image_name }}
+          docker push ${{ env.image_name }}
