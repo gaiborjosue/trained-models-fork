@@ -1,21 +1,36 @@
 import os
+import json
 
+def get_push_commit_message():
+    event_path = os.environ.get('GITHUB_EVENT_PATH')
+
+    if not event_path:
+        print("Error: GITHUB_EVENT_PATH not set.")
+        return None
+
+    with open(event_path, 'r') as event_file:
+        event_data = json.load(event_file)
+
+    if 'commits' in event_data and len(event_data['commits']) > 0:
+        commit_message = event_data['commits'][0]['message']
+        org_folder = commit_message.split(':', 1)[0].strip()
+        return org_folder
+    else:
+        print("Error: No commit messages found in the event data.")
+        return None
 def get_latest_model_name():
-    # Get the script's current file path
-    script_path = os.path.abspath(__file__)
+    org_folder = get_push_commit_message()
+    
+    # Cd into the org folder
+    os.chdir(org_folder)
 
-    # Navigate two folders back to the root of the repository
-    root_path = os.path.dirname(os.path.dirname(script_path))
+    # List all files
+    model_n = os.listdir('.')[0]
 
-    # Move to the root directory
-    os.chdir(root_path)
-
-    # Move two directories back to the desired location
-    os.chdir("..")
-
-    org_folder = max([folder for folder in os.listdir('.') if os.path.isdir(folder) and folder != 'objects'], key=os.path.getctime)
-    model_folder = max([folder for folder in os.listdir(org_folder) if os.path.isdir(os.path.join(org_folder, folder))], key=os.path.getctime)
-    return os.path.basename(model_folder)
+    if model_n == 'objects':
+        exit()
+    else:
+        return model_n
 
 if __name__ == "__main__":
 
