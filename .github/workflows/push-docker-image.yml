@@ -22,7 +22,7 @@ jobs:
     - name: Get latest model folder
       id: get_latest_folder
       run: |
-          python ./.github/workflows/get_latest_model_name.py > latest_folder.txt
+          python get_latest_model_name.py > latest_folder.txt
     
     - name: Read latest folder name
       id: read_latest_folder
@@ -31,7 +31,7 @@ jobs:
     - name: Get Dockerfile path
       id: get_dockerfile_path
       run: |
-          python ./.github/workflows/get_dockerfile_path.py > dockerfile_path.txt
+          python get_dockerfile_path.py > dockerfile_path.txt
       
     - name: Read Dockerfile path
       id: read_dockerfile_path
