@@ -1,7 +1,7 @@
 import os
 
 def get_latest_model_name():
-    org_folder = max([folder for folder in os.listdir('.') if os.path.isdir(folder) and folder != 'objects'], key=os.path.getctime)
+    org_folder = "DeepCSR"
     
     # Cd into the org folder
     os.chdir(org_folder)
