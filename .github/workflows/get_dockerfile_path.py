@@ -13,6 +13,19 @@ def get_dockerfile_path(model_folder):
     return None
 
 if __name__ == "__main__":
+
+    # Get the script's current file path
+    script_path = os.path.abspath(__file__)
+
+    # Navigate two folders back to the root of the repository
+    root_path = os.path.dirname(os.path.dirname(script_path))
+
+    # Move to the root directory
+    os.chdir(root_path)
+
+    # Move two directories back to the desired location
+    os.chdir("..")
+    
     model_folder = get_latest_model_name()
 
     dockerfile_path = get_dockerfile_path(model_folder)
