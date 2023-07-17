@@ -2,8 +2,14 @@ import os
 
 def get_latest_model_name():
     org_folder = max([folder for folder in os.listdir('.') if os.path.isdir(folder) and folder != 'objects'], key=os.path.getctime)
-    model_folder = max([folder for folder in os.listdir(org_folder) if os.path.isdir(os.path.join(org_folder, folder))], key=os.path.getctime)
-    return os.path.basename(model_folder)
+    
+    # Cd into the org folder
+    os.chdir(org_folder)
+
+    # List all files
+    model_n = os.listdir('.')[0]
+
+    return model_n
 
 if __name__ == "__main__":
 
