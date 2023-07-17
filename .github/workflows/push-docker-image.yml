@@ -1,0 +1,53 @@
+name: Docker build and Push
+
+on:
+  push:
+    branches: [ "master" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+    
+    steps:
+    
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.9
+        
+    - name: Get latest model folder
+      id: get_latest_folder
+      run: |
+          python /.github/workflows/get_latest_model_name.py > latest_folder.txt
+    
+    - name: Read latest folder name
+      id: read_latest_folder
+      run: echo::set-output name=model_folder::$(cat latest_folder.txt)
+      
+    - name: Get Dockerfile path
+      id: get_dockerfile_path
+      run: |
+          python /.github/workflows/get_dockerfile_path.py > dockerfile_path.txt
+      
+    - name: Read Dockerfile path
+      id: read_dockerfile_path
+      run: echo ::set-output name=dockerfile_path::$(cat dockerfile_path.txt)
+      
+    - name: Set Docker image name
+      id: set_image_name
+      run: |
+          echo ::set-output name=image_name::neuronets/${{ steps.read_latest_folder.outputs.model_folder | replace('\\', '/') }}      
+
+    - name: Build and push Docker image
+      env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
+          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+      run: |
+          cd ${{ steps.read_dockerfile_path.outputs.dockerfile_path }}
+          docker build -t ${{ steps.set_image_name.outputs.image_name }} .
+          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+          docker push ${{ steps.set_image_name.outputs.image_name }}
