@@ -40,12 +40,12 @@ jobs:
     - name: Set Docker image name
       id: set_image_name
       run: |
-          echo ::set-output name=image_name::neuronets/${{ steps.read_latest_folder.outputs.model_folder | replace('\\', '/') }}      
+          echo ::set-output name=image_name::neuronets/${{ steps.read_latest_folder.outputs.model_folder }}      
 
     - name: Build and push Docker image
       env:
-          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_HUB_USERNAME }}
-          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
       run: |
           cd ${{ steps.read_dockerfile_path.outputs.dockerfile_path }}
           docker build -t ${{ steps.set_image_name.outputs.image_name }} .
