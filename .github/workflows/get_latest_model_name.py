@@ -1,32 +1,21 @@
 import os
-import subprocess
 
 def get_latest_model_name():
-    root_path = os.environ.get('GITHUB_WORKSPACE')
+    # Get the script's current file path
+    script_path = os.path.abspath(__file__)
 
-    # Get the commit SHA of the latest push from the GitHub context
-    commit_sha = os.environ.get('GITHUB_SHA')
+    # Navigate two folders back to the root of the repository
+    root_path = os.path.dirname(os.path.dirname(script_path))
 
-    # Get the list of modified files in the latest push commit
-    git_command = ['git', 'diff-tree', '--no-commit-id', '--name-only', '-r', commit_sha]
-    modified_files = subprocess.check_output(git_command, cwd=root_path, text=True).splitlines()
+    # Move to the root directory
+    os.chdir(root_path)
 
-    # Find the latest modified model folder
-    latest_model_folder = None
-    latest_modification_time = 0
+    # Move two directories back to the desired location
+    os.chdir("..")
 
-    for file in modified_files:
-        file_path = os.path.join(root_path, file)
-        if os.path.isdir(file_path):
-            modification_time = os.path.getmtime(file_path)
-            if modification_time > latest_modification_time:
-                latest_modification_time = modification_time
-                latest_model_folder = file
-
-    if latest_model_folder:
-        return os.path.join(root_path, latest_model_folder)
-    else:
-        return None
+    org_folder = max([folder for folder in os.listdir('.') if os.path.isdir(folder) and folder != 'objects'], key=os.path.getctime)
+    model_folder = max([folder for folder in os.listdir(org_folder) if os.path.isdir(os.path.join(org_folder, folder))], key=os.path.getctime)
+    return os.path.basename(model_folder)
 
 if __name__ == "__main__":
 
