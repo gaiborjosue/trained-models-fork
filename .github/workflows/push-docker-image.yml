@@ -26,7 +26,7 @@ jobs:
     
     - name: Read latest folder name
       id: read_latest_folder
-      run: echo::set-output name=model_folder::$(cat latest_folder.txt)
+      run: echo "model_folder=$(cat latest_folder.txt)" >> $GITHUB_ENV
       
     - name: Get Dockerfile path
       id: get_dockerfile_path
@@ -35,19 +35,19 @@ jobs:
       
     - name: Read Dockerfile path
       id: read_dockerfile_path
-      run: echo ::set-output name=dockerfile_path::$(cat dockerfile_path.txt)
+      run: echo "dockerfile_path=$(cat dockerfile_path.txt)" >> $GITHUB_ENV
       
     - name: Set Docker image name
       id: set_image_name
       run: |
-          echo ::set-output name=image_name::neuronets/${{ steps.read_latest_folder.outputs.model_folder }}      
+          echo "image_name=neuronets/${{ steps.read_latest_folder.outputs.model_folder }}" >> $GITHUB_ENV      
 
     - name: Build and push Docker image
       env:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
       run: |
-          cd ${{ steps.read_dockerfile_path.outputs.dockerfile_path }}
-          docker build -t ${{ steps.set_image_name.outputs.image_name }} .
+          cd ${{ env.dockerfile_path }}
+          docker build -t ${{ env.image_name }} .
           docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-          docker push ${{ steps.set_image_name.outputs.image_name }}
+          docker push ${{ env.image_name }}
