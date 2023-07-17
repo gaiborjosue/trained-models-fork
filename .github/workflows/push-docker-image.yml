@@ -40,7 +40,7 @@ jobs:
     - name: Set Docker image name
       id: set_image_name
       run: |
-          echo "image_name=neuronets/${{ steps.read_latest_folder.outputs.model_folder }}" >> $GITHUB_ENV      
+          echo "image_name=neuronets/${{ env.model_folder }}" >> $GITHUB_ENV      
 
     - name: Build and push Docker image
       env:
