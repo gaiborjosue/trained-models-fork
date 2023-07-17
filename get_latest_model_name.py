@@ -9,7 +9,10 @@ def get_latest_model_name():
     # List all files
     model_n = os.listdir('.')[0]
 
-    return model_n
+    if model_n == 'objects':
+        exit()
+    else:
+        return model_n
 
 if __name__ == "__main__":
 
