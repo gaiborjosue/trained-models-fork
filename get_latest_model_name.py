@@ -23,9 +23,6 @@ def get_latest_model_name():
     
     # Cd into the org folder
     os.chdir(org_folder)
-    
-    # Cd into the org folder
-    os.chdir(org_folder)
 
     # List all files
     model_n = os.listdir('.')[0]
