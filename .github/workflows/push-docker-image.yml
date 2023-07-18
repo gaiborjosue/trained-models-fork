@@ -51,3 +51,7 @@ jobs:
           docker build -t ${{ env.image_name }} .
           docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
           docker push ${{ env.image_name }}
+    
+    - name: Update yaml file
+      id: update_yaml
+      run: python ./.github/workflows/update_yaml_info.py

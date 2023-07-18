@@ -40,6 +40,7 @@ def get_dockerfile_path(model_folder):
                 return os.path.join(root)
     return None
 
+
 if __name__ == "__main__":
     model_folder = get_latest_model_name()
 
