@@ -36,8 +36,8 @@ chmod +x ~/miniconda.sh && \
 
 WORKDIR /app
 COPY requirements.yml .
-ADD CBSI.tar.gz .
-RUN tar -xvzf CBSI.tar.gz
+ADD CBSI.tar .
+RUN tar xvzf CBSI.tar
 RUN mkdir niftyreg-build
 ENV CMAKE_BUILD_TYPE=Release
 WORKDIR /app/niftyreg-build
