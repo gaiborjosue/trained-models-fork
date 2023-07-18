@@ -2,7 +2,7 @@ import yaml
 import os
 
 def edit_spec_yaml(path, model_name):
-    spec_file = os.path.join(path, "spec.yaml")
+    spec_file = f"{path}/spec.yaml"
     
     # Check if the spec.yaml file exists
     if not os.path.isfile(spec_file):
@@ -14,12 +14,13 @@ def edit_spec_yaml(path, model_name):
         spec_data = yaml.safe_load(f)
 
     # Update the container info keys
-    container_info = spec_data.get("container info", {})
-    container_info["image"]["singularity"] = f"nobrainer-zoo_{model_name}.sif"
-    container_info["image"]["docker"] = f"neuronets/{model_name}"
+    # The key is "image"
+    container_info = spec_data.get("image", {})
+    container_info["singularity"] = f"nobrainer-zoo_{model_name}.sif"
+    container_info["docker"] = f"neuronets/{model_name}"
 
     # Update the spec.yaml content with the modified data
-    spec_data["container info"] = container_info
+    spec_data["image"] = container_info
 
     # Write the updated data back to the spec.yaml file
     with open(spec_file, "w") as f:
