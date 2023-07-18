@@ -1,1 +1,0 @@
-/home/runner/work/trained-models-fork/trained-models-fork/DeepCSR/deepcsr/1.0
