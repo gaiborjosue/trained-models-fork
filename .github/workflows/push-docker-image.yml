@@ -40,8 +40,11 @@ jobs:
     - name: Set Docker image name
       id: set_image_name
       run: |
-          echo "image_name=neuronets/${{ env.model_folder }}" >> $GITHUB_ENV      
-    
+          echo "image_name=neuronets/${{ env.model_folder }}" >> $GITHUB_ENV    
+
+    - name: Install PyYAML
+      run: pip install PyYAML
+      
     - name: Update yaml file
       id: update_yaml
       run: python ./.github/workflows/update_yaml_info.py
