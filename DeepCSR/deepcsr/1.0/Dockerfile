@@ -33,3 +33,4 @@ ENV CONDA_URL=https://repo.anaconda.com/miniconda/Miniconda3-py38_4.10.3-Linux-x
 RUN curl -fsSL -v -o ~/miniconda.sh -O ${CONDA_URL} && \
 chmod +x ~/miniconda.sh && \
 ~/miniconda.sh -b -p /opt/miniconda3 
+
