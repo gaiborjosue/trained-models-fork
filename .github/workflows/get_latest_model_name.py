@@ -16,7 +16,7 @@ def extract_organization_name(pull_request_description):
     return None
 
 def get_latest_model_name():
-    pull_request_description = sys.argv[1]
+    pull_request_description = os.environ.get("pr_body")
 
     org_folder = extract_organization_name(pull_request_description)
     

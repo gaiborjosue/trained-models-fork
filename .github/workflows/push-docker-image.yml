@@ -18,11 +18,15 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
+
+    - name: Set pr_body environment variable
+      env:
+        pr_body: ${{ github.event.pull_request.body }}
         
     - name: Get latest model folder
       id: get_latest_folder
       run: |
-          python ./.github/workflows/get_latest_model_name.py "{{ github.event.pull_request.body }}" > latest_folder.txt
+          python ./.github/workflows/get_latest_model_name.py > latest_folder.txt
     
     - name: Read latest folder name
       id: read_latest_folder

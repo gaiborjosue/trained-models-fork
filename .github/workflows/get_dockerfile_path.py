@@ -17,7 +17,7 @@ def extract_organization_name(pull_request_description):
 
 def get_latest_model_name():
     # Get the pull request description from the github action environment variables
-    pull_request_description = os.environ.get('pr_body')
+    pull_request_description = os.environ.get("pr_body")
 
 
     org_folder = extract_organization_name(pull_request_description)
