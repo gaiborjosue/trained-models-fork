@@ -1,5 +1,4 @@
 name: Docker build and Push
-
 on:
   pull_request:
     types: [opened, synchronize]
