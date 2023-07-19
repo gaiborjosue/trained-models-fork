@@ -46,6 +46,7 @@ def get_latest_model_name():
         exit()
     else:
         return model_n
+    
 def get_dockerfile_path(model_folder):
     for root, _, files in os.walk(model_folder):
         for file in files:

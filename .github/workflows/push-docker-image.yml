@@ -23,7 +23,7 @@ jobs:
     - name: Install yaml
       run: |
           pip install pyyaml
-          
+
     - name: Get latest model folder
       id: get_latest_folder
       run: |
@@ -46,5 +46,20 @@ jobs:
       id: set_image_name
       run: |
           echo "image_name=neuronets/${{ env.model_folder }}" >> $GITHUB_ENV
+
+    - name: Update yaml file
+      id: update_yaml
+      run: python ./.github/workflows/update_yaml_info.py
+
+    - name: Generate Model Card
+      id: generate_model_card
+      run: |
+        python ./.github/workflows/create_model_card.py
+    
+    - name: Commit changes
+      run: |
+          git add ${{ env.dockerfile_path }}/spec.yaml ${{ env.dockerfile_path }}/model_card.md
+          git commit -m "Update YAML file and Model Card by GitHub Actions"
+          git push origin master
 
 
