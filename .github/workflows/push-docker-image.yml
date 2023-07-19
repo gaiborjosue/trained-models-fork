@@ -18,7 +18,8 @@ jobs:
       run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          git checkout -b ${{ github.event.pull_request.number }}
+          git fetch origin
+          git checkout -b ${{ github.head_ref }}
 
     - name: Set up Python
       uses: actions/setup-python@v2
@@ -67,4 +68,4 @@ jobs:
       run: |
           git add ${{ env.dockerfile_path }}/spec.yaml ${{ env.dockerfile_path }}/model_card.md
           git commit -m "Update"
-          git push --set-upstream origin ${{ github.event.pull_request.number }}
+          git push -f origin ${{ github.head_ref }}
