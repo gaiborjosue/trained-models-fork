@@ -20,7 +20,7 @@ def get_pull_request_description():
         exit()
 
     with open(pr_event_url, 'r') as file:
-        pr_event_data = json.load(file)
+        pr_event_data = yaml.safe_load(file)
 
     # Extract the pull request description from the payload
     pull_request_description = pr_event_data.get('pull_request', {}).get('body', None)
@@ -32,7 +32,7 @@ def get_pull_request_description():
         return pull_request_description
     
 def get_latest_model_name():
-    pull_request_description = get_pull_request_description()
+    pull_request_description = os.environ.get("PR_BODY", None)
 
     org_folder = extract_organization_name(pull_request_description)
     # Cd into the org folder
