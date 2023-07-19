@@ -1,5 +1,6 @@
 import os
 import yaml
+import json
 
 def extract_organization_name(pull_request_description):
     try:
