@@ -32,8 +32,7 @@ def get_pull_request_description():
     
 def get_latest_model_name():
     pull_request_description = get_pull_request_description()
-
-
+    
     org_folder = extract_organization_name(pull_request_description)
     
     # Cd into the org folder
