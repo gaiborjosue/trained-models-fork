@@ -1,8 +1,10 @@
 name: Docker build and Push
 on:
   pull_request:
-    types: [opened, synchronize]
-
+    types: [opened, synchronize, closed]
+  push:
+    branches:
+      - master
 jobs:
 
   build:
