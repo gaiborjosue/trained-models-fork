@@ -12,21 +12,25 @@ def extract_organization_name(pull_request_description):
         return None
 
 def get_latest_model_name():
-    with open('./pr_description.yaml', 'r') as file:
-        pull_request_description = file.read()
+    if os.path.exists('./pr_description.yaml'):
 
-    org_folder = extract_organization_name(pull_request_description)
-    print(org_folder)
-    # Cd into the org folder
-    os.chdir(org_folder)
+        with open('./pr_description.yaml', 'r') as file:
+            pull_request_description = file.read()
 
-    # List all files
-    model_n = os.listdir('.')[0]
+        org_folder = extract_organization_name(pull_request_description)
+        print(org_folder)
+        # Cd into the org folder
+        os.chdir(org_folder)
 
-    if model_n == 'objects':
-        exit()
+        # List all files
+        model_n = os.listdir('.')[0]
+
+        if model_n == 'objects':
+            exit()
+        else:
+            return model_n
     else:
-        return model_n
+        return "pr_description.yaml not found."
 
 if __name__ == "__main__":
 
