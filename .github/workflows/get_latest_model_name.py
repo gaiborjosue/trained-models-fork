@@ -12,11 +12,11 @@ def extract_organization_name(pull_request_description):
         return None
 
 def get_latest_model_name():
-    with open('pr_description.yaml', 'r') as file:
+    with open('./pr_description.yaml', 'r') as file:
         pull_request_description = file.read()
 
     org_folder = extract_organization_name(pull_request_description)
-    
+    print(org_folder)
     # Cd into the org folder
     os.chdir(org_folder)
 
