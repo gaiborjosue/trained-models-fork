@@ -1,5 +1,6 @@
 import os
 import yaml
+import json
 
 def extract_organization_name(pull_request_description):
     try:
@@ -19,7 +20,7 @@ def get_pull_request_description():
         exit()
 
     with open(pr_event_url, 'r') as file:
-        pr_event_data = yaml.safe_load(file)
+        pr_event_data = json.load(file)
 
     # Extract the pull request description from the payload
     pull_request_description = pr_event_data.get('pull_request', {}).get('body', None)
