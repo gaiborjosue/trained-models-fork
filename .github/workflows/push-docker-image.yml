@@ -29,12 +29,12 @@ jobs:
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
 
+
+    - name: Get the user's fork URL
+      run: echo "user_fork_url=https://github.com/${{ github.actor }}/${{ github.repository }}" >> $GITHUB_ENV
+    
     - name: Fetch User's Fork
-      run: git fetch https://github.com/${{ github.head_repository.owner.login }}/${{ github.head_repository.name }}.git ${{ github.head_ref }}
-
-    - name: Checkout User's Forked Branch
-      run: git checkout -b user_branch FETCH_HEAD
-
+      run: git fetch ${{ env.user_fork_url }} ${{ github.head_ref }}
 
     - name: Get latest model folder
       id: get_latest_folder
@@ -73,4 +73,4 @@ jobs:
       run: |
           git add ${{ env.dockerfile_path }}/spec.yaml ${{ env.dockerfile_path }}/model_card.md
           git commit -m "Update"
-          git push -f origin user_branch
+          git push -f ${{ env.user_fork_url }} user_branch
