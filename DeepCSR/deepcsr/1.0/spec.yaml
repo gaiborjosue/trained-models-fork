@@ -1,5 +1,5 @@
 image:
-  docker: neuronets/deepcsr
+  docker: neuronets/test
   singularity: nobrainer-zoo_deepcsr.sif
 inference:
   command: f"python {MODELS_PATH}/{model}/predict.py --conf_path {conf}"

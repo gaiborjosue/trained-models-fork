@@ -14,16 +14,27 @@ jobs:
     
     - uses: actions/checkout@v3
     
+    - name: Checkout PR
+      run: |
+          git config --global user.name "GitHub Actions"
+          git config --global user.email "actions@github.com"
+          git checkout -b ${{ github.event.pull_request.number }}
+
     - name: Set up Python
       uses: actions/setup-python@v2
       with:
         python-version: 3.9
-        
+    
+    # Install yaml
+    - name: Install yaml
+      run: |
+          pip install pyyaml
+
     - name: Get latest model folder
       id: get_latest_folder
       run: |
           python ./.github/workflows/get_latest_model_name.py > latest_folder.txt
-    
+
     - name: Read latest folder name
       id: read_latest_folder
       run: echo "model_folder=$(cat latest_folder.txt)" >> $GITHUB_ENV
@@ -42,4 +53,18 @@ jobs:
       run: |
           echo "image_name=neuronets/${{ env.model_folder }}" >> $GITHUB_ENV
 
+    - name: Update yaml file
+      id: update_yaml
+      run: python ./.github/workflows/update_yaml_info.py
 
+    - name: Generate Model Card
+      id: generate_model_card
+      run: |
+        python ./.github/workflows/create_model_card.py
+
+
+    - name: Commit changes
+      run: |
+          git add ${{ env.dockerfile_path }}/spec.yaml ${{ env.dockerfile_path }}/model_card.md
+          git commit -m "Update"
+          git push --set-upstream origin ${{ github.event.pull_request.number }}
