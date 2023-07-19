@@ -1,26 +1,22 @@
 import os
+import re
 
-import json
+def extract_organization_name(pull_request_description):
+    # Regular expression pattern to match the 'Organization Name' line in the template
+    pattern = r'Organization Name:\s+(.*)'
 
-def get_push_commit_message():
-    event_path = os.environ.get('GITHUB_EVENT_PATH')
+    # Search for the pattern in the pull request description
+    match = re.search(pattern, pull_request_description, re.IGNORECASE)
 
-    if not event_path:
-        print("Error: GITHUB_EVENT_PATH not set.")
-        return None
-
-    with open(event_path, 'r') as event_file:
-        event_data = json.load(event_file)
-
-    if 'commits' in event_data and len(event_data['commits']) > 0:
-        commit_message = event_data['commits'][0]['message']
-        org_folder = commit_message.split(':', 1)[0].strip()
-        return org_folder
-    else:
-        print("Error: No commit messages found in the event data.")
-        return None
+    if match:
+        organization_name = match.group(1).strip()
+        # Return the organization name just as it is, with upper and lower case letters if any
+        return organization_name
+    return None
 def get_latest_model_name():
-    org_folder = get_push_commit_message()
+    pull_request_description = os.environ.get('INPUT PULL_REQUEST_BODY')
+
+    org_folder = extract_organization_name(pull_request_description)
     
     # Cd into the org folder
     os.chdir(org_folder)
@@ -32,7 +28,6 @@ def get_latest_model_name():
         exit()
     else:
         return model_n
-
 def get_dockerfile_path(model_folder):
     for root, _, files in os.walk(model_folder):
         for file in files:
