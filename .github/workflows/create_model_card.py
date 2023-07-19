@@ -89,11 +89,42 @@ def get_dockerfile_path(model_folder):
                 return os.path.join(root)
     return None
 
+def extract_organization_name(pull_request_description):
+    try:
+        data = yaml.safe_load(pull_request_description)
+        model_details = data.get('Model Details', {})
+        org_name = model_details.get('Organization Name', None)
+        return org_name
+    except Exception as e:
+        print(f"Error while parsing YAML: {e}")
+        return None
+    
+def get_latest_model_name():
+    pull_request_description = get_pull_request_description()
+
+
+    org_folder = extract_organization_name(pull_request_description)
+    
+    # Cd into the org folder
+    os.chdir(org_folder)
+
+    # Assign current directory to model_n
+    model_n = os.getcwd()
+
+    if model_n == 'objects':
+        exit()
+    else:
+        return model_n
+
 
 if __name__ == "__main__":
     # Use your parsed PR description here
     pr_description = get_pull_request_description()
 
-    output_file_path = get_dockerfile_path(os.environ.get('model_folder', None))
+    model_folder = get_latest_model_name()
+
+    dockerfile_path = get_dockerfile_path(model_folder)
+
+    output_file_path = dockerfile_path + "/model_card.md"
 
     create_model_card(pr_description, output_file_path + "/model_card.md")
