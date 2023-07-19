@@ -20,8 +20,7 @@ jobs:
         python-version: 3.9
 
     - name: Set pr_body environment variable
-      env:
-        pr_body: ${{ github.event.pull_request.body }}
+      run: echo """pr_body=${{ github.event.pull_request.body }}""" >> $GITHUB_ENV
         
     - name: Get latest model folder
       id: get_latest_folder
