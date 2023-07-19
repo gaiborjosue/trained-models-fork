@@ -1,6 +1,6 @@
 import os
 import re
-import json
+import sys
 
 def extract_organization_name(pull_request_description):
     # Regular expression pattern to match the 'Organization Name' line in the template
