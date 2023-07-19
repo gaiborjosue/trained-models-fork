@@ -67,4 +67,4 @@ jobs:
       run: |
           git add ${{ env.dockerfile_path }}/spec.yaml ${{ env.dockerfile_path }}/model_card.md
           git commit -m "Update"
-          git push
+          git push --set-upstream origin ${{ github.event.pull_request.number }}
