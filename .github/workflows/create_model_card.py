@@ -119,7 +119,7 @@ def get_latest_model_name():
 
 if __name__ == "__main__":
     # Use your parsed PR description here
-    pr_description = get_pull_request_description()
+    pr_description = yaml.safe_load(get_pull_request_description())
 
     model_folder = get_latest_model_name()
 
@@ -127,4 +127,4 @@ if __name__ == "__main__":
 
     output_file_path = dockerfile_path + "/model_card.md"
 
-    create_model_card(pr_description, output_file_path + "/model_card.md")
+    create_model_card(pr_description, output_file_path)
