@@ -20,13 +20,16 @@ jobs:
         python-version: 3.9
 
     - name: Set pr_body environment variable
-      run: echo """pr_body=${{ github.event.pull_request.body }}"""  | tr -d '\n' >> $GITHUB_ENV
+      run: echo "pr_body=${{ github.event.pull_request.body }}" >> $GITHUB_ENV
         
     - name: Get latest model folder
       id: get_latest_folder
       run: |
+          pip install pyyaml
           python ./.github/workflows/get_latest_model_name.py > latest_folder.txt
-    
+      env:
+          pr_body: ${{ env.pr_body }}
+          
     - name: Read latest folder name
       id: read_latest_folder
       run: echo "model_folder=$(cat latest_folder.txt)" >> $GITHUB_ENV

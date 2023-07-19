@@ -1,22 +1,18 @@
 import os
-import re
-import sys
+import yaml
 
 def extract_organization_name(pull_request_description):
-    # Regular expression pattern to match the 'Organization Name' line in the template
-    pattern = r'Organization Name:\s+(.*)'
-
-    # Search for the pattern in the pull request description
-    match = re.search(pattern, pull_request_description, re.IGNORECASE)
-
-    if match:
-        organization_name = match.group(1).strip()
-        # Return the organization name just as it is, with upper and lower case letters if any
-        return organization_name
-    return None
+    try:
+        data = yaml.safe_load(pull_request_description)
+        model_details = data.get('Model Details', {})
+        org_name = model_details.get('Organization Name', None)
+        return org_name
+    except Exception as e:
+        print(f"Error while parsing YAML: {e}")
+        return None
 
 def get_latest_model_name():
-    pull_request_description = os.environ.get("pr_body")
+    pull_request_description = os.environ.get("pr_body", '')
 
     org_folder = extract_organization_name(pull_request_description)
     
