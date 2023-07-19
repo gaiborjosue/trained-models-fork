@@ -3,17 +3,23 @@ import json
 import re
 
 def extract_organization_name(pull_request_description):
+
+    pr_data = json.loads(pull_request_description)
+
+    pr_body = pr_data.get('body')
+
     # Regular expression pattern to match the 'Organization Name' line in the template
     pattern = r'Organization Name:\s+(.*)'
 
     # Search for the pattern in the pull request description
-    match = re.search(pattern, pull_request_description, re.IGNORECASE)
+    match = re.search(pattern, pr_body, re.IGNORECASE)
 
     if match:
         organization_name = match.group(1).strip()
         # Return the organization name just as it is, with upper and lower case letters if any
         return organization_name
     return None
+
 def get_latest_model_name():
     pull_request_description = os.environ.get('INPUT PULL_REQUEST_BODY')
     org_folder = extract_organization_name(pull_request_description)
