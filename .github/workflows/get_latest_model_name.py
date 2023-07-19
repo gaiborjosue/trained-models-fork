@@ -34,7 +34,7 @@ def get_pull_request_description():
 def get_latest_model_name():
     pull_request_description = os.environ.get("PR_BODY", None)
 
-    org_folder = extract_organization_name(pull_request_description)
+    org_folder = "DeepCSR"
     # Cd into the org folder
     os.chdir(org_folder)
 
