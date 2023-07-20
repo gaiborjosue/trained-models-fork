@@ -57,3 +57,4 @@ RUN apt-get clean
 RUN pip cache purge
 RUN conda clean -a
 ENTRYPOINT ["/bin/bash", "-l", "-c"]
+
