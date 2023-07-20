@@ -73,6 +73,16 @@ jobs:
       run: |
         python ./.github/workflows/create_model_card.py
 
+    - name: Build and push Docker image
+      env:
+          DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+          DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+      run: |
+          cd ${{ env.dockerfile_path }}/
+          docker build -t ${{ env.image_name }} .
+          docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
+          docker push ${{ env.image_name }}
+
       # The actual commit will only happen when the PR is merged
     - name: Commit changes
       if: github.event_name == 'pull_request' && github.event.pull_request.merged == true
