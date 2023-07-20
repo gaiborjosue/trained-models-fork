@@ -10,12 +10,6 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    
-    permissions:
-      contents: write
-
-    env:
-      PAT_TOKEN: ${{ secrets.PAT_TOKEN }}
 
     steps:
     
@@ -30,16 +24,6 @@ jobs:
     - name: Install yaml
       run: |
           pip install pyyaml
-    
-    - name: Checkout PR
-      run: |
-          git config --global user.name "GitHub Actions"
-          git config --global user.email "actions@github.com"
-    
-    - name: Install GitHub CLI
-      run: |
-          # Install GitHub CLI
-          curl -fsSL https://cli.github.com/install.sh | sh
 
     - name: Get latest model folder
       id: get_latest_folder
@@ -78,7 +62,7 @@ jobs:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
       run: |
-          docker build -t ${{ env.image_name }} ${{ env.dockerfile_path }}/
+          docker build -t ${{ env.image_name }} ${{ env.dockerfile_path }}
           docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
           docker push ${{ env.image_name }}
 
