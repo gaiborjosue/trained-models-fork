@@ -1,7 +1,7 @@
-name: Docker build and Push
+name: Docker build
 on:
   pull_request:
-    types: [opened, synchronize, closed]
+    types: [opened, closed]
   push:
     branches:
       - master
@@ -78,10 +78,9 @@ jobs:
           DOCKER_HUB_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_ACCESS_TOKEN }}
       run: |
-          cd DeepCSR/deepcsr/1.0/
-          docker build -t neuronets/deepcsr .
+          docker build -t ${{ env.image_name }} ${{ env.dockerfile_path }}/
           docker login -u $DOCKER_HUB_USERNAME -p $DOCKER_HUB_PASSWORD
-          docker push neuronets/deepcsr
+          docker push ${{ env.image_name }}
 
       # The actual commit will only happen when the PR is merged
     - name: Commit changes
