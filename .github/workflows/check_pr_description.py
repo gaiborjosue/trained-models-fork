@@ -57,9 +57,9 @@ def check_pr():
         # Check if the org name in model card matches the org name in the pull request description
         if model_card.get("Model Details", {}).get("Organization", None) == org_name:
             print(f"The 'Organization Name:' key is not empty. Value: {org_name}")
-        else:
-            print("The 'Organization Name:' key is empty. PR cannot be accepted.")
-            exit(1)
+    else:
+        print("The 'Organization Name:' key is empty. PR cannot be accepted.")
+        exit(1)
 
 if __name__ == '__main__':
     check_pr()
