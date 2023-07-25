@@ -1,5 +1,5 @@
 # Auto generated from model_card-schema.yaml by pythongen.py version: 0.9.0
-# Generation date: 2023-07-25T09:45:09
+# Generation date: 2023-07-25T10:24:13
 # Schema: personinfo
 #
 # id: https://w3id.org/linkml/examples/personinfo
@@ -170,14 +170,14 @@ class ModelSpec(YAMLRoot):
 
     dockerImage: str = None
     singularityImage: str = None
-    repoUrl: str = None
-    committish: str = None
-    repoDownload: str = None
-    repoDownloadLocation: str = None
-    command: str = None
-    n_files: int = None
-    on_files: int = None
-    prediction_script: str = None
+    repoUrl: Optional[str] = None
+    committish: Optional[str] = None
+    repoDownload: Optional[str] = None
+    repoDownloadLocation: Optional[str] = None
+    command: Optional[str] = None
+    n_files: Optional[int] = None
+    on_files: Optional[int] = None
+    prediction_script: Optional[str] = None
     total: Optional[int] = None
     train: Optional[int] = None
     evaluate: Optional[int] = None
@@ -215,44 +215,28 @@ class ModelSpec(YAMLRoot):
         if not isinstance(self.singularityImage, str):
             self.singularityImage = str(self.singularityImage)
 
-        if self._is_empty(self.repoUrl):
-            self.MissingRequiredField("repoUrl")
-        if not isinstance(self.repoUrl, str):
+        if self.repoUrl is not None and not isinstance(self.repoUrl, str):
             self.repoUrl = str(self.repoUrl)
 
-        if self._is_empty(self.committish):
-            self.MissingRequiredField("committish")
-        if not isinstance(self.committish, str):
+        if self.committish is not None and not isinstance(self.committish, str):
             self.committish = str(self.committish)
 
-        if self._is_empty(self.repoDownload):
-            self.MissingRequiredField("repoDownload")
-        if not isinstance(self.repoDownload, str):
+        if self.repoDownload is not None and not isinstance(self.repoDownload, str):
             self.repoDownload = str(self.repoDownload)
 
-        if self._is_empty(self.repoDownloadLocation):
-            self.MissingRequiredField("repoDownloadLocation")
-        if not isinstance(self.repoDownloadLocation, str):
+        if self.repoDownloadLocation is not None and not isinstance(self.repoDownloadLocation, str):
             self.repoDownloadLocation = str(self.repoDownloadLocation)
 
-        if self._is_empty(self.command):
-            self.MissingRequiredField("command")
-        if not isinstance(self.command, str):
+        if self.command is not None and not isinstance(self.command, str):
             self.command = str(self.command)
 
-        if self._is_empty(self.n_files):
-            self.MissingRequiredField("n_files")
-        if not isinstance(self.n_files, int):
+        if self.n_files is not None and not isinstance(self.n_files, int):
             self.n_files = int(self.n_files)
 
-        if self._is_empty(self.on_files):
-            self.MissingRequiredField("on_files")
-        if not isinstance(self.on_files, int):
+        if self.on_files is not None and not isinstance(self.on_files, int):
             self.on_files = int(self.on_files)
 
-        if self._is_empty(self.prediction_script):
-            self.MissingRequiredField("prediction_script")
-        if not isinstance(self.prediction_script, str):
+        if self.prediction_script is not None and not isinstance(self.prediction_script, str):
             self.prediction_script = str(self.prediction_script)
 
         if self.total is not None and not isinstance(self.total, int):
@@ -449,28 +433,28 @@ slots.modelSpec__singularityImage = Slot(uri=PERSONINFO.singularityImage, name="
                    model_uri=PERSONINFO.modelSpec__singularityImage, domain=None, range=str)
 
 slots.modelSpec__repoUrl = Slot(uri=PERSONINFO.repoUrl, name="modelSpec__repoUrl", curie=PERSONINFO.curie('repoUrl'),
-                   model_uri=PERSONINFO.modelSpec__repoUrl, domain=None, range=str)
+                   model_uri=PERSONINFO.modelSpec__repoUrl, domain=None, range=Optional[str])
 
 slots.modelSpec__committish = Slot(uri=PERSONINFO.committish, name="modelSpec__committish", curie=PERSONINFO.curie('committish'),
-                   model_uri=PERSONINFO.modelSpec__committish, domain=None, range=str)
+                   model_uri=PERSONINFO.modelSpec__committish, domain=None, range=Optional[str])
 
 slots.modelSpec__repoDownload = Slot(uri=PERSONINFO.repoDownload, name="modelSpec__repoDownload", curie=PERSONINFO.curie('repoDownload'),
-                   model_uri=PERSONINFO.modelSpec__repoDownload, domain=None, range=str)
+                   model_uri=PERSONINFO.modelSpec__repoDownload, domain=None, range=Optional[str])
 
 slots.modelSpec__repoDownloadLocation = Slot(uri=PERSONINFO.repoDownloadLocation, name="modelSpec__repoDownloadLocation", curie=PERSONINFO.curie('repoDownloadLocation'),
-                   model_uri=PERSONINFO.modelSpec__repoDownloadLocation, domain=None, range=str)
+                   model_uri=PERSONINFO.modelSpec__repoDownloadLocation, domain=None, range=Optional[str])
 
 slots.modelSpec__command = Slot(uri=PERSONINFO.command, name="modelSpec__command", curie=PERSONINFO.curie('command'),
-                   model_uri=PERSONINFO.modelSpec__command, domain=None, range=str)
+                   model_uri=PERSONINFO.modelSpec__command, domain=None, range=Optional[str])
 
 slots.modelSpec__n_files = Slot(uri=PERSONINFO.n_files, name="modelSpec__n_files", curie=PERSONINFO.curie('n_files'),
-                   model_uri=PERSONINFO.modelSpec__n_files, domain=None, range=int)
+                   model_uri=PERSONINFO.modelSpec__n_files, domain=None, range=Optional[int])
 
 slots.modelSpec__on_files = Slot(uri=PERSONINFO.on_files, name="modelSpec__on_files", curie=PERSONINFO.curie('on_files'),
-                   model_uri=PERSONINFO.modelSpec__on_files, domain=None, range=int)
+                   model_uri=PERSONINFO.modelSpec__on_files, domain=None, range=Optional[int])
 
 slots.modelSpec__prediction_script = Slot(uri=PERSONINFO.prediction_script, name="modelSpec__prediction_script", curie=PERSONINFO.curie('prediction_script'),
-                   model_uri=PERSONINFO.modelSpec__prediction_script, domain=None, range=str)
+                   model_uri=PERSONINFO.modelSpec__prediction_script, domain=None, range=Optional[str])
 
 slots.modelSpec__total = Slot(uri=PERSONINFO.total, name="modelSpec__total", curie=PERSONINFO.curie('total'),
                    model_uri=PERSONINFO.modelSpec__total, domain=None, range=Optional[int])
