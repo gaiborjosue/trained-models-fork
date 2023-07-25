@@ -29,6 +29,10 @@ jobs:
           pip install pyyaml
           pip install oyaml
 
+    # Install linkml
+    - name: Install LinkML
+      run: pip install linkml
+
     # Check if the PR description "Organization Name" has a value and matches the one in the model card
     - name: Check PR description
       id: check_pr_desc
