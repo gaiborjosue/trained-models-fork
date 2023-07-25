@@ -1,41 +1,33 @@
 Model_details:
-  Organization: DeepCSR
-  Model_date:
-  Model_version:
-  Model_type:
-  More_information:
-  Citation_details:
-  Contact_info:
-
+  Organization: null
+  Model_date: null
+  Model_version: null
+  Model_type: null
+  More_information: null
+  Citation_details: null
+  Contact_info: null
 Intended_use:
-  Primary_intended_uses:
-  Primary_intended_users:
-  Out_of_scope_use_cases:
-
+  Primary_intended_uses: null
+  Primary_intended_users: null
+  Out_of_scope_use_cases: null
 Factors:
-  Relevant_factors:
-  Evaluation_factors:
-  Model_performance_measures:
-
+  Relevant_factors: null
+  Evaluation_factors: null
+  Model_performance_measures: null
 Metrics:
-  Model Performance Measures:
-  Decision Thresholds:
-  Variation Approaches:
-
+  Model Performance Measures: null
+  Decision Thresholds: null
+  Variation Approaches: null
 Evaluation Data:
-  Datasets:
-  Motivation:
-  Preprocessing:
-
+  Datasets: null
+  Motivation: null
+  Preprocessing: null
 Training Data:
-  Datasets:
-  Motivation:
-  Preprocessing:
-
+  Datasets: null
+  Motivation: null
+  Preprocessing: null
 Quantitative Analyses:
-  Unitary Results:
-  Intersectional Results:
-
-Ethical Considerations:
-
-Caveats and Recommendations:
+  Unitary Results: null
+  Intersectional Results: null
+Ethical Considerations: null
+Caveats and Recommendations: null

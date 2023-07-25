@@ -1,36 +1,46 @@
 image:
   docker: neuronets/deepcsr
   singularity: nobrainer-zoo_deepcsr.sif
+repository:
+  repo_url: None
+  committish: None
+  repo_download: 'False'
+  repo_download_location: None
 inference:
+  prediction_script: trained-models/DeepCSR/deepcsr/1.0/predict.py
   command: f"python {MODELS_PATH}/{model}/predict.py --conf_path {conf}"
   data_spec:
-    conf:
-      n_files: 1
-  prediction_script: trained-models/DeepCSR/deepcsr/1.0/predict.py
-model:
-  Zoo_function: predict
-  caveats_recs: ''
-  description: 3D deep learning framework for cortical surface reconstruction from
-    MRI
-  ethical_considerations: ''
-  eval_data: ''
-  example: nobrainer-zoo predict -m DeepCSR/deepcsr/1.0 <path_to_input>
-  factors: ''
-  input_file_type: yaml
-  intended_use: ''
-  metrics: ''
-  model_details: ''
-  model_name: deepcsr
-  model_url: https://github.com/neuroneural/DeepCSR-fork/
-  note: The output will be the stl files and will be saved in the config file's specified
-    directory. For the input config file examples please see the /configs/predict.yaml
-    file inside the model's repo.
-  quant_analyses: ''
-  structure: Meshnet
-  training_data: ''
-  training_mode: supervised
-repository:
-  committish: None
-  repo_download: false
-  repo_download_location: None
-  repo_url: None
+    infile:
+      n_files: null
+    outfile:
+      n_files: null
+training_data_info:
+  data_number:
+    total: null
+    train: null
+    evaluate: null
+    test: null
+  biological_sex:
+    male: null
+    female: null
+  age_histogram: null
+  race: null
+  imaging_contrast_info: null
+  dataset_sources: null
+  data_sites:
+    number_of_sites: null
+    sites: null
+  scanner_models: null
+  hardware: null
+  training_parameters:
+    input_shape: null
+    block_shape: null
+    n_classes: null
+    lr: null
+    n_epochs: null
+    total_batch_size: null
+    number_of_gpus: null
+    loss_function: null
+    metrics: null
+    data_preprocessing: null
+    data_augmentation: null
