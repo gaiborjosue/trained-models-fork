@@ -40,7 +40,9 @@ jobs:
     - name: Leave a comment and close PR
       if: steps.check_pr_desc.outcome != 'success'
       run: |
-        echo "The PR description key 'Organization Name' is empty. Please fill in the required information." | gh pr comment ${{ github.event.number }}
+        comment_body="The PR description key 'Organization Name' is empty. Please fill in the required information."
+        
+        gh pr comment ${{ github.event.number }} --body "$comment_body"
 
         gh pr close ${{ github.event.number }}
 
