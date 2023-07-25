@@ -92,8 +92,6 @@ jobs:
     - name: Update yaml file
       id: update_yaml
       run: python ./.github/workflows/update_yaml_info.py
-  
-  
 
     # Commit the changes (spec.yaml file and model card)
     - name: Commit changes
@@ -104,6 +102,7 @@ jobs:
 
         # Add, commit, and push the changes to the user's branch
         git add ${{ env.dockerfile_path }}/spec.yaml ${{ env.dockerfile_path }}/model_card.yaml
+
         git commit -m "Update"
 
         git push origin HEAD:${{ github.head_ref }}
