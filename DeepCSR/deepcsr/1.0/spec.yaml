@@ -6,13 +6,7 @@ repository:
   committish: None
   repo_download: 'False'
   repo_download_location: None
-repository:
-  repo_url: None
-  committish: None
-  repo_download: 'False'
-  repo_download_location: None
 inference:
-  prediction_script: trained-models/DeepCSR/deepcsr/1.0/predict.py
   prediction_script: trained-models/DeepCSR/deepcsr/1.0/predict.py
   command: f"python {MODELS_PATH}/{model}/predict.py --conf_path {conf}"
   data_spec:
@@ -27,8 +21,8 @@ training_data_info:
     evaluate: 1
     test: 1
   biological_sex:
-    male: true
-    female: 1
+    male:
+    female:
   age_histogram: '1'
   race: '1'
   imaging_contrast_info: '1'
