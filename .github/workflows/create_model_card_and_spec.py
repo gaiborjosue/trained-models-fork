@@ -230,7 +230,7 @@ if __name__ == "__main__":
     model_n = os.getcwd()
 
     # Get the dockerfile path
-    dockerfile_path = get_dockerfile_path(model_n)
+    dockerfile_path = f"{org_folder}/{model_n}/{version_folder}"
 
     # Create the model card and spec yaml file
     card_path = dockerfile_path + "/model_card.yaml"
