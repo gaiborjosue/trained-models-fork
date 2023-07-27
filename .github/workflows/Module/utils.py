@@ -28,33 +28,24 @@ def extract_organization_name(pull_request_description):
         data = oyaml.safe_load(pull_request_description)
         model_details = data.get('Model Details', {})
 
-        return [model_details.get(key, None) for key in ['Organization Name', 'Model Version']]
+        return [model_details.get(key, None) for key in ['Organization Name', 'Model Version', 'Model Name']]
     
     except Exception as e:
         print(f"Error while parsing YAML: {e}")
         return None
     
-def get_dockerfile_path(model_folder):
+def get_dockerfile_path():
     pull_request_description = get_pull_request_description()
     
-    org_folder, version_folder = extract_organization_name(pull_request_description)
+    org_folder, version_folder, model_name = extract_organization_name(pull_request_description)
 
-    dockerFilePath = f"{org_folder}/{model_folder}/{version_folder}"
+    dockerFilePath = f"{org_folder}/{model_name}/{version_folder}"
 
     return dockerFilePath
 
 def get_latest_model_name():
     pull_request_description = get_pull_request_description()
     
-    org_folder, version_folder = extract_organization_name(pull_request_description)
+    org_folder, version_folder, model_name = extract_organization_name(pull_request_description)
     
-    # Cd into the org folder
-    os.chdir(org_folder)
-
-    # Assign current directory to model_n
-    model_n = os.getcwd()
-
-    if model_n == 'objects':
-        exit()
-    else:
-        return model_n
+    return model_name

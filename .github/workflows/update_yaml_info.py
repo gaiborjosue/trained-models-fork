@@ -31,8 +31,7 @@ def edit_spec_yaml(path, model_name):
 
 if __name__ == "__main__":
     model_folder = get_latest_model_name()
-
-    dockerfile_path = get_dockerfile_path(model_folder)
+    dockerfile_path = get_dockerfile_path()
 
     success = edit_spec_yaml(dockerfile_path, model_folder)
     

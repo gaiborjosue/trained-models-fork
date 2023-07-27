@@ -8,15 +8,8 @@ def check_pr():
 
     # Check if org_name is empty or not
     if org_name:
-        # Check if it matches the org name in model card
-        # Cd into the org folder
-        os.chdir(org_name)
-
-        # Assign current directory to model_n
-        model_n = os.getcwd()
-
         # Path to the model card
-        model_card_path = get_dockerfile_path(model_n) + "/model_card.yaml"
+        model_card_path = get_dockerfile_path() + "/model_card.yaml"
 
         # Load the model card
         with open(model_card_path, 'r') as file:
