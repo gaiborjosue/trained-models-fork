@@ -1,6 +1,6 @@
 ## Changelog
 
-### Version 1.0.0 🚀 (2023-07-18)
+### Version 1.0.0 🚀 (2023-07-27)
 
 - **Feature** (minor): Added a LinkML schema and validator for creating model_card and spec yaml files.
 - **Feature** (minor): Created a PR template to get data for the workflow.
