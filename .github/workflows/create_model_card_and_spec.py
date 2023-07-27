@@ -1,7 +1,7 @@
 import oyaml
 import os
 from modelScheme import ModelCard, ModelSpec
-from Module.utils import get_latest_model_name, get_dockerfile_path
+from Module.utils import get_latest_model_name, get_dockerfile_path, get_pull_request_description, extract_organization_name
 
 def create_model_card(card_path):
     # Load the infile yaml file
@@ -219,11 +219,18 @@ def create_spec_yaml(model_path):
 
 
 if __name__ == "__main__":
-    # Get the latest model name
-    model_folder = get_latest_model_name()
+    pull_request_description = get_pull_request_description()
+    
+    org_folder, version_folder = extract_organization_name(pull_request_description)
+    
+    # Cd into the org folder
+    os.chdir(org_folder)
+
+    # Assign current directory to model_n
+    model_n = os.getcwd()
 
     # Get the dockerfile path
-    dockerfile_path = get_dockerfile_path(model_folder)
+    dockerfile_path = get_dockerfile_path(model_n)
 
     # Create the model card and spec yaml file
     card_path = dockerfile_path + "/model_card.yaml"
