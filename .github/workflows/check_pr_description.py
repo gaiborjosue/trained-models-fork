@@ -4,7 +4,7 @@ from Module.utils import extract_organization_name, get_dockerfile_path, get_pul
 
 def check_pr():
     pr_description = get_pull_request_description()
-    org_name, version_folder = extract_organization_name(pr_description)
+    org_name, version_folder, model_name = extract_organization_name(pr_description)
 
     # Check if org_name is empty or not
     if org_name:
