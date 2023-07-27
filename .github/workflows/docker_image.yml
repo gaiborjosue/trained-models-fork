@@ -118,4 +118,3 @@ jobs:
         git pull --rebase origin master
 
         git push origin HEAD:master
-        
