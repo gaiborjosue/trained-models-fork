@@ -1,4 +1,3 @@
-print("hello world")
 from omegaconf import DictConfig, OmegaConf
 import hydra, logging, os
 import torch
@@ -17,13 +16,13 @@ logger = logging.getLogger(__name__)
 
 
 def mesh_extraction(local_args):
-    surf_name, isrpr_vol, isrpr_affine, cfg = local_args
+    surf_name, isrpr_vol, isrpr_affine, cfg, output_dir = local_args
     isrpr_affine = np.eye(4) if isrpr_affine is None else isrpr_affine
     local_timer = TicToc(); local_timer_dict = {}    
 
     # save predictions
     if cfg.outputs.save_all:
-        isrpr_vol_path = os.path.join(cfg.outputs.output_dir, 'isrpr_vol_{}_{}.nii.gz'.format(cfg.inputs.mri_id, surf_name))
+        isrpr_vol_path = os.path.join(output_dir, 'isrpr_vol_{}_{}.nii.gz'.format(cfg.inputs.mri_id, surf_name))
         save_nib_image(isrpr_vol_path, isrpr_vol)
         logger.info("predicted implicit surface volume for surface {} saved to {}".format(surf_name, isrpr_vol_path))
 
@@ -47,7 +46,7 @@ def mesh_extraction(local_args):
             surf_name, isrpr_vol.shape, local_timer_dict['PostProcessingImplicictSurface']))
 
         if cfg.outputs.save_all:
-            isrpr_vol_path = os.path.join(cfg.outputs.output_dir, 'isrpr_vol_postproc_{}_{}.nii.gz'.format(cfg.inputs.mri_id, surf_name))
+            isrpr_vol_path = os.path.join(output_dir, 'isrpr_vol_postproc_{}_{}.nii.gz'.format(cfg.inputs.mri_id, surf_name))
             save_nib_image(isrpr_vol_path, isrpr_vol)
             logger.info("Post-processed predicted implicit surface volume for surface {} saved to {}".format(surf_name, isrpr_vol_path))
 
@@ -63,7 +62,7 @@ def mesh_extraction(local_args):
             surf_name, local_timer_dict["{}_ImplicictSurfaceSmooth".format(surf_name)]))
 
         if cfg.outputs.save_all:
-            isrpr_vol_path = os.path.join(cfg.outputs.output_dir, 'isrpr_vol_smoothed_{}_{}.nii.gz'.format(cfg.inputs.mri_id, surf_name))
+            isrpr_vol_path = os.path.join(output_dir, 'isrpr_vol_smoothed_{}_{}.nii.gz'.format(cfg.inputs.mri_id, surf_name))
             save_nib_image(isrpr_vol_path, isrpr_vol)
             logger.info("Smoothed predicted implicit surface volume for surface {} saved to {}".format(surf_name, isrpr_vol_path))
 
@@ -79,7 +78,7 @@ def mesh_extraction(local_args):
         local_timer_dict["{}_TopologyFix".format(surf_name)] = local_timer.toc('TopologyFix')
         logger.info("Fixed topology of surface {} using nighres in {:.4f} secs".format(surf_name, local_timer_dict["{}_TopologyFix".format(surf_name)]))
         if cfg.outputs.save_all:
-            isrpr_vol_path = os.path.join(cfg.outputs.output_dir, 'isrpr_vol_smoothed_topofixed_{}_{}.nii.gz'.format(cfg.inputs.mri_id, surf_name))
+            isrpr_vol_path = os.path.join(output_dir, 'isrpr_vol_smoothed_topofixed_{}_{}.nii.gz'.format(cfg.inputs.mri_id, surf_name))
             save_nib_image(isrpr_vol_path, isrpr_vol, isrpr_affine, isrpr_header)
             logger.info("Fixed topology predicted implicit surface volume for surface {} saved to {}".format(surf_name, isrpr_vol_path))
    
@@ -94,7 +93,7 @@ def mesh_extraction(local_args):
     vertices /= np.array([cfg.generator.resolution-1, cfg.generator.resolution-1, cfg.generator.resolution-1])    
     vertices = bbox_size * (vertices - 0.5)        
     local_timer_dict["{}_IsoSurfaceExtraction".format(surf_name)] = local_timer.toc('IsoSurfaceExtraction')
-    surface_path = os.path.join(cfg.outputs.output_dir, '{}_{}.stl'.format(cfg.inputs.mri_id, surf_name))
+    surface_path = os.path.join(output_dir, '{}_{}.stl'.format(cfg.inputs.mri_id, surf_name))
     mesh = trimesh.Trimesh(vertices, triangles, process=False) 
     mesh.export(surface_path)
     logger.info("Surface {} extracted in {:.4f} secs and saved to {}".format(
@@ -104,30 +103,31 @@ def mesh_extraction(local_args):
     return mesh, local_timer_dict
 
 @click.command()
-@click.option("--conf_path", default="path/to/cloned/weights", help="Config file path .yaml")
+@click.option("--conf_path", help="Config file path .yaml")
+@click.option("--model_checkpoint", help="Model checkpoint path .pth")
+@click.option("--dataset", help="Dataset path")
+@click.option("--output_dir", help="Output directory")
 # Replaced Hydra with click argument for nobrainer-zoo: @hydra.main(config_path='configs', config_name='predict')
-def predict_app(conf_path):    
-
-        # override configuration with a user defined config file
-        # if cfg.user_config is not None:
-            # user_config = OmegaConf.load(cfg.user_config)
-            # cfg = OmegaConf.merge(cfg, user_config)
+def predict_app(conf_path, model_checkpoint, dataset, output_dir):    
 
         cfg = OmegaConf.load(conf_path)
+        print("Loaded conf")
 
         logger.info('Predicting surfaces with DeepCSR\nConfig:\n{}'.format(OmegaConf.to_yaml(cfg)))
 
         # timer
         timer = TicToc(); timer_dict = {}; timer.tic('Total')
-
+        
         # read MRI
         timer.tic('ReadData')
         normalizer, inverter_affine = NormalizeMRIVoxels('mean_std'), InvertAffine('mri_affine')
-        mri_header, mri_vox, mri_affine = mri_reader(cfg.inputs.mri_vol_path)
+        mri_header, mri_vox, mri_affine = mri_reader(dataset)
         mri_vox = torch.from_numpy(np.expand_dims(normalizer({'mri_vox': mri_vox})['mri_vox'], 0)).float().to(cfg.model.device)
         mri_affine_inv = torch.from_numpy(np.expand_dims(inverter_affine({'mri_affine': mri_affine})['mri_affine'], 0)).float().to(cfg.model.device)
         timer_dict['ReadData'] = timer.toc('ReadData')
-        logger.info("MRI {} read with {} dimensions in {:.4f} secs".format(cfg.inputs.mri_vol_path, mri_vox.shape, timer_dict['ReadData']))
+        logger.info("MRI {} read with {} dimensions in {:.4f} secs".format(dataset, mri_vox.shape, timer_dict['ReadData']))
+
+        print("Finished reading mri")
         
         # setup model 
         timer.tic('ModelSetup')
@@ -137,21 +137,21 @@ def predict_app(conf_path):
         logger.info("{:.4f} secs for DeepCSR model setup:\n{}".format(timer_dict['ModelSetup'], model))        
         model_num_params = sum(p.numel() for p in model.parameters())    
         logger.info('Total number of parameters: {}'.format(model_num_params))
-        
+        print("finished setup model")
         # load model weights    
         timer.tic('ModelLoadWeights')
-        best_ite, best_val_loss = load_checkpoint(cfg.inputs.model_checkpoint, model=model)
+        best_ite, best_val_loss = load_checkpoint(model_checkpoint, model=model)
         timer_dict['ModelLoadWeights'] = timer.toc('ModelLoadWeights')
         logger.info("Model weights at iteration {} and validation loss {:.4f} loaded from {} in {:.4f} secs".format(
-            best_ite, best_val_loss, cfg.inputs.model_checkpoint, timer_dict['ModelLoadWeights']))
-
+            best_ite, best_val_loss, model_checkpoint, timer_dict['ModelLoadWeights']))
+        print("finished model weights")
         # generate grid of points at desired resolution
         timer.tic('ImplicitSurfacePrediction')    
         logger.info("predicting implicit surfaces ...")
         bbox_size = torch.from_numpy(np.array(cfg.generator.bbox_size)).float()
         query_points = bbox_size * make_3d_grid((-0.5,)*3, (0.5,)*3, (cfg.generator.resolution,)*3)
         logger.info("{} query points generated to predict implicit surfaces".format(query_points.shape[0]))
-
+        print("finished generate grid of points")
         # implicit surface prediction in batches and reusing computed features   
         with torch.no_grad():                
             precomp_feature_maps, pred_isrpr_vol = None, []
@@ -174,7 +174,7 @@ def predict_app(conf_path):
         logger.info("extracting meshes...")
         timer.tic('MeshExtraction')    
         with Pool(len(cfg.inputs.model_surfaces)) as p:
-            args_iter = [(surf_name, pred_isrpr_vol[:,:,:, surf_idx], None, cfg) for surf_idx, surf_name in enumerate(cfg.inputs.model_surfaces)]        
+            args_iter = [(surf_name, pred_isrpr_vol[:,:,:, surf_idx], None, cfg, output_dir) for surf_idx, surf_name in enumerate(cfg.inputs.model_surfaces)]        
             out_iter = p.map(mesh_extraction, args_iter)
         timer_dict['MeshExtraction'] = timer.toc('MeshExtraction')
         logger.info("Surfaces extracted in {:.4f} secs".format(timer_dict['MeshExtraction']))
@@ -183,12 +183,12 @@ def predict_app(conf_path):
         # dummy_args = (cfg.inputs.model_surfaces[0], pred_isrpr_vol[:,:,:, 0], None, cfg)
         # mesh_extraction(dummy_args)
         # dummy_args.stop()
-
+        print("Generated meshes in parallel")
         # timer statistics to disk
         timer_dict['Total'] = timer.toc('Total')
         for _, local_timer in out_iter: timer_dict.update(local_timer)
         logger.info("Timer summary:")
-        with open(os.path.join(cfg.outputs.output_dir, "{}_timer.txt".format(cfg.inputs.mri_id)), 'w') as file:
+        with open(os.path.join(output_dir, "{}_timer.txt".format(cfg.inputs.mri_id)), 'w') as file:
             for key, value in timer_dict.items():
                 file.write('{},{}\n'.format(key, value))
                 logger.info('\t{} => {:.4f} secs'.format(key, value))
