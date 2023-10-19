@@ -1,6 +1,6 @@
 image:
-  docker: neuronets/deepcsr
-  singularity: nobrainer-zoo_deepcsr.sif
+  docker: neuronets/nobrainer-zoo:deepcsr
+  singularity: /om2/user/egaibor/test_nobrainer/nobrainer-zoo/nobrainerzoo/deepcsr.sif
 repository:
   repo_url: None
   committish: None
@@ -8,39 +8,40 @@ repository:
   repo_download_location: None
 inference:
   prediction_script: trained-models/DeepCSR/deepcsr/1.0/predict.py
-  command: f"python {MODELS_PATH}/{model}/predict.py --conf_path {conf} --model_checkpoint {infile[0]} --dataset {infile[1]}"
+  command: f"python {MODELS_PATH}/{model}/predict.py --conf_path {infile[0]} --model_checkpoint
+    {infile[1]} --dataset {infile[2]} --output_dir {infile[3]}"
   data_spec:
     infile:
-      n_files: 1
+      n_files: 4
     outfile:
-      n_files: 1
+      n_files: null
 training_data_info:
   data_number:
-    total: 1
-    train: 1
-    evaluate: 1
-    test: 1
+    total: null
+    train: null
+    evaluate: null
+    test: null
   biological_sex:
-    male:
-    female:
-  age_histogram: '1'
-  race: '1'
-  imaging_contrast_info: '1'
-  dataset_sources: '1'
+    male: null
+    female: null
+  age_histogram: null
+  race: null
+  imaging_contrast_info: null
+  dataset_sources: null
   data_sites:
-    number_of_sites: 1
-    sites: '1'
-  scanner_models: '1'
-  hardware: '1'
+    number_of_sites: null
+    sites: null
+  scanner_models: null
+  hardware: null
   training_parameters:
-    input_shape: '1'
-    block_shape: '1'
-    n_classes: 1
-    lr: '1'
-    n_epochs: 1
-    total_batch_size: 1
-    number_of_gpus: 1
-    loss_function: '1'
-    metrics: '1'
-    data_preprocessing: '1'
-    data_augmentation: '1'
+    input_shape: null
+    block_shape: null
+    n_classes: null
+    lr: null
+    n_epochs: null
+    total_batch_size: null
+    number_of_gpus: null
+    loss_function: null
+    metrics: null
+    data_preprocessing: null
+    data_augmentation: null
