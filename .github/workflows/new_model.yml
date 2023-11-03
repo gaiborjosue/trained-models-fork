@@ -288,8 +288,8 @@ jobs:
       - uses: actions/checkout@v4
         if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
-            ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
-            fetch-depth: 0
+          ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
+          fetch-depth: 0
 
 
       # Set up Python
@@ -345,7 +345,7 @@ jobs:
 
               datalad save . -m "Added model weights"
               
-              datalad push --to osf-annex2-storage
+              datalad push --to osf-annex5-storage
               datalad push --to origin
 
       - name: Git-annex/Datalad add the sample datasets
