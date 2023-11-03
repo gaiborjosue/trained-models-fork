@@ -325,6 +325,11 @@ jobs:
           OSF_TOKEN: ${{ secrets.OSF_TOKEN }}
         run: |
               # datalad siblings
+
+              echo $PWD
+              cat .git/config
+              echo "================================================================="
+
               mkdir ./${{ needs.create_new_branch.outputs.MODELPATH }}/weights
 
               cd ./${{ needs.create_new_branch.outputs.MODELPATH }}/weights
