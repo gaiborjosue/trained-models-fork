@@ -326,6 +326,7 @@ jobs:
         run: |
               # datalad siblings
 
+              git branch -a
               echo $PWD
               cat .git/config
               echo "================================================================="
