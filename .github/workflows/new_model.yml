@@ -303,12 +303,14 @@ jobs:
         if: needs.create_new_branch.outputs.BRANCHNAME == ''
         with:
           ref: issue-${{ github.event.issue.number }}
+          fetch-depth: 0
 
       # If branchName is empty use issue number, else, use the branchName 🟢
       - uses: actions/checkout@v3
         if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
             ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
+            fetch-depth: 0
 
       # Set up Python
       - name: Set up Python
