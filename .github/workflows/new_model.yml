@@ -102,13 +102,6 @@ jobs:
     steps:
       # Checkout the repository to the GitHub Actions runner to the new branch created for the issue 🟢
       - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME == ''
-        with:
-          ref: issue-${{ github.event.issue.number }}
-
-      # If branchName is empty use issue number, else, use the branchName 🟢
-      - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
             ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
 
@@ -189,14 +182,8 @@ jobs:
 
     steps:
     # Checkout the repository to the GitHub Actions runner 🟢
-    - uses: actions/checkout@v4
-      if: needs.create_new_branch.outputs.BRANCHNAME == ''
-      with:
-        ref: issue-${{ github.event.issue.number }}
-
     # If branchName is empty use issue number, else, use the branchName 🟢
     - uses: actions/checkout@v4
-      if: needs.create_new_branch.outputs.BRANCHNAME != ''
       with:
           ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
 
@@ -251,14 +238,8 @@ jobs:
 
     steps:
       # Checkout the repository to the GitHub Actions runner 🟢
-      - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME == ''
-        with:
-          ref: issue-${{ github.event.issue.number }}
-
       # If branchName is empty use issue number, else, use the branchName 🟢
       - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
             ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
 
@@ -277,16 +258,8 @@ jobs:
 
     steps:
       # Checkout the repository to the GitHub Actions runner to the new branch created for the issue 🟢
-      - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME == ''
-        with:
-          ref: issue-${{ github.event.issue.number }}
-          fetch-depth: 0
-
-
       # If branchName is empty use issue number, else, use the branchName 🟢
       - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
           ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
           fetch-depth: 0
@@ -329,22 +302,10 @@ jobs:
           OSF_TOKEN: ${{ secrets.OSF_TOKEN }}
         run: |
               # datalad siblings
-
-              git branch -a
-              echo $PWD
-              cat .git/config
-              echo "================================================================="
-
               mkdir -p ./${{ needs.create_new_branch.outputs.MODELPATH }}/weights
-
               cd ./${{ needs.create_new_branch.outputs.MODELPATH }}/weights
-
-              # datalad download-url --overwrite -m "Added Weights" -O ./${{ needs.create_new_branch.outputs.MODELPATH }}/weights/best_model.${{ steps.get_extensions_weights.outputs.weights_ext }} "${{ needs.create_new_branch.outputs.WEIGHTS }}"
-
-              datalad download-url --overwrite -m "Added Sample Dataset" "${{ needs.create_new_branch.outputs.WEIGHTS }}"
-
-              datalad save . -m "Added model weights"
-              
+              datalad download-url --overwrite -m "Added model weights" "${{ needs.create_new_branch.outputs.WEIGHTS }}"
+              # datalad save . -m "Added model weights"
               datalad push --to osf-annex5-storage
               datalad push --to origin
 
@@ -353,15 +314,10 @@ jobs:
           OSF_TOKEN: ${{ secrets.OSF_TOKEN }}
         run: |
           mkdir -p ./${{ needs.create_new_branch.outputs.MODELPATH }}/example-data
-
           cd ./${{ needs.create_new_branch.outputs.MODELPATH }}/example-data
-
           # datalad download-url --overwrite -m "Added Sample Dataset" -O ./${{needs.create_new_branch.outputs.MODELPATH}}/example-data/sample.${{ steps.get_extensions_sample_data.outputs.sample_ext }} "${{needs.create_new_branch.outputs.SAMPLEDATA}}"
-
           datalad download-url --overwrite -m "Added Sample Dataset" "${{ needs.create_new_branch.outputs.SAMPLEDATA }}"
-
-          datalad save . -m "Added sample data"
-
+          # datalad save . -m "Added sample data"
           datalad push --to osf-annex5-storage
           datalad push --to origin
 
@@ -422,16 +378,15 @@ jobs:
           large-packages: true
           docker-images: false
         
-      - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME == ''
-        with:
-          ref: issue-${{ github.event.issue.number }}
-
       # If branchName is empty use issue number, else, use the branchName 🟢
       - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
             ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.11
 
       - name: Install singularity
         run: |
@@ -440,100 +395,101 @@ jobs:
           sudo apt install ./singularity-ce_4.0.0-focal_amd64.deb -y
           singularity version
 
-      # Build the Docker image 🟢
-      - name: Build Docker image
-        run: |
-          docker build -t ${{ needs.build-docker.outputs.MODELNAME }} ./${{ needs.create_new_branch.outputs.MODELPATH }}/docker
-          docker save --output ./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.tar ${{ needs.build-docker.outputs.MODELNAME }}
+      # # Build the Docker image 🟢
+      # - name: Build Docker image
+      #   run: |
+      #     docker build -t ${{ needs.build-docker.outputs.MODELNAME }} ./${{ needs.create_new_branch.outputs.MODELPATH }}/docker
+      #     docker save --output ./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.tar ${{ needs.build-docker.outputs.MODELNAME }}
 
-      # Convert the docker image to a singularity image
-      - name: Convert docker image to singularity image
-        run: |
-          singularity build ./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.sif docker-archive://./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.tar
+      # # Convert the docker image to a singularity image
+      # - name: Convert docker image to singularity image
+      #   run: |
+      #     singularity build ./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.sif docker-archive://./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.tar
 
       # Datalad get the sample dataset
       - name: Get sample dataset
         run: |
-          sudo apt install python3-pip -y
-          sudo apt-get install datalad -y
-          python3 -m pip install datalad-osf
-          sudo python3 -m pip install datalad-installer
-          datalad-installer --sudo ok git-annex -m datalad/git-annex:release
-          sudo git config --global filter.annex.process "git-annex filter-process"
+          which pip
+          # sudo apt install python3-pip -y
+          # sudo apt-get install datalad -y
+          # python3 -m pip install datalad-osf
+          # sudo python3 -m pip install datalad-installer
+          # datalad-installer --sudo ok git-annex -m datalad/git-annex:release
+          # sudo git config --global filter.annex.process "git-annex filter-process"
 
-          git config --system user.name "trained_models"
-          git config --system user.email "trained_models"
+      #     git config --system user.name "trained_models"
+      #     git config --system user.email "trained_models"
 
-          datalad get ./${{ needs.create_new_branch.outputs.MODELPATH }}/weights/
+      #     datalad get ./${{ needs.create_new_branch.outputs.MODELPATH }}/weights/
 
-          datalad get ./${{ needs.create_new_branch.outputs.MODELPATH }}/example-data/
+      #     datalad get ./${{ needs.create_new_branch.outputs.MODELPATH }}/example-data/
 
-          sudo apt install unzip
+      #     sudo apt install unzip
 
-          cd ./${{ needs.create_new_branch.outputs.MODELPATH }}/example-data/
+      #     cd ./${{ needs.create_new_branch.outputs.MODELPATH }}/example-data/
           
-          find . -name "*.zip" -exec unzip {} \;
+      #     find . -name "*.zip" -exec unzip {} \;
 
-          # Push the dataset to the repo
-          datalad save . -m "Added sample data"
+      #     # Push the dataset to the repo
+      #     datalad save . -m "Added sample data"
 
-          datalad push --to osf-annex2-storage
-          datalad push --to origin
+      #     datalad push --to osf-annex2-storage
+      #     datalad push --to origin
           
 
 
-      - name: Get the weights
-        run: |
-          cd ./${{ needs.create_new_branch.outputs.MODELPATH }}/weights/
+      # - name: Get the weights
+      #   run: |
+      #     cd ./${{ needs.create_new_branch.outputs.MODELPATH }}/weights/
 
-          find . -name "*.zip" -exec unzip {} \;
+      #     find . -name "*.zip" -exec unzip {} \;
 
-          # Push the weights to the repo
-          datalad save . -m "Added model weights"
-          datalad push --to osf-annex2-storage
-          datalad push --to origin
+      #     # Push the weights to the repo
+      #     datalad save . -m "Added model weights"
+      #     datalad push --to osf-annex2-storage
+      #     datalad push --to origin
 
 
-      - name: Collect Workflow Telemetry
-        uses: runforesight/workflow-telemetry-action@v1
-        with:
-          job_summary: true
-          proc_trace_sys_enable: true
-          proc_trace_table_show: true
+      # - name: Collect Workflow Telemetry
+      #   uses: runforesight/workflow-telemetry-action@v1
+      #   with:
+      #     job_summary: true
+      #     proc_trace_sys_enable: true
+      #     proc_trace_table_show: true
 
-      # Run in singularity the test command saved under needs.create_new_branch.outputs.DEEPCSR
-      - name: Run test command in Singularity
-        run: |
-          # Parent directory as a bind path in a env variable
+      # # Run in singularity the test command saved under needs.create_new_branch.outputs.DEEPCSR
+      # - name: Run test command in Singularity
+      #   run: |
+      #     # Parent directory as a bind path in a env variable
 
-          singularity exec --nv ./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.sif ${{ needs.create_new_branch.outputs.TESTCOMMAND }}
+      #     singularity exec --nv ./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.sif ${{ needs.create_new_branch.outputs.TESTCOMMAND }}
 
-      # Load the Docker image 🟢
-      - name: Load Docker image
-        run: |
-          docker load --input "./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.tar"
+      # # Load the Docker image 🟢
+      # - name: Load Docker image
+      #   run: |
+      #     docker load --input "./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.tar"
 
-      # Test model with docker image as well
-      - name: Run test command in Docker
-        run: |
-          docker run --gpus all -v /actions-runner/_work/${{ github.event.repository.name }}/${{ github.event.repository.name }}:/output ${{ needs.build-docker.outputs.MODELNAME }} "cd /output; ${{ needs.create_new_branch.outputs.TESTCOMMAND }}"
+      # # Test model with docker image as well
+      # - name: Run test command in Docker
+      #   run: |
+      #     docker run --gpus all -v /actions-runner/_work/${{ github.event.repository.name }}/${{ github.event.repository.name }}:/output ${{ needs.build-docker.outputs.MODELNAME }} "cd /output; ${{ needs.create_new_branch.outputs.TESTCOMMAND }}"
           
-      # Get model's version from model's path
-      - name: Get model's version
-        id: modelVersion
-        run: |
-          # Get the version
-          model_version=$(echo "${{ needs.create_new_branch.outputs.MODELPATH }}" | awk -F '/' '{print $(NF)}')
+      # # Get model's version from model's path
+      # - name: Get model's version
+      #   id: modelVersion
+      #   run: |
+      #     # Get the version
+      #     model_version=$(echo "${{ needs.create_new_branch.outputs.MODELPATH }}" | awk -F '/' '{print $(NF)}')
           
-          # Set the version as an output
-          echo "model_version=$model_version" >> $GITHUB_OUTPUT
+      #     # Set the version as an output
+      #     echo "model_version=$model_version" >> $GITHUB_OUTPUT
       
-      # Push the Docker image to Docker Hub (only if the PR is merged) 🟢
-      - name: Push Docker image
-        run: |
-          docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
-          docker tag ${{ needs.build-docker.outputs.MODELNAME }} ${{ needs.build-docker.outputs.IMAGENAME }}:${{ steps.modelVersion.outputs.model_version }}
-          docker push ${{ needs.build-docker.outputs.IMAGENAME }}:${{ steps.modelVersion.outputs.model_version }}
+      # # Push the Docker image to Docker Hub (only if the PR is merged) 🟢
+      # - name: Push Docker image
+      #   run: |
+      #     docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+      #     docker tag ${{ needs.build-docker.outputs.MODELNAME }} ${{ needs.build-docker.outputs.IMAGENAME }}:${{ steps.modelVersion.outputs.model_version }}
+      #     docker push ${{ needs.build-docker.outputs.IMAGENAME }}:${{ steps.modelVersion.outputs.model_version }}
     
   stop-runner:
     name: Stop self-hosted EC2 runner
