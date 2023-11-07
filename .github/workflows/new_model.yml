@@ -362,7 +362,7 @@ jobs:
 
           datalad save . -m "Added sample data"
 
-          datalad push --to osf-annex2-storage
+          datalad push --to osf-annex5-storage
           datalad push --to origin
 
 
