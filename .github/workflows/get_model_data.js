@@ -22,6 +22,7 @@ const getAllPaths = function(dirPath, arrayOfPaths) {
     return arrayOfPaths;
 }
 
+
 function findObj(name, arr) {
   for (const obj of arr) {
     if (obj.name === name) return obj;
