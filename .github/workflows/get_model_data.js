@@ -14,7 +14,7 @@ const getAllPaths = function(dirPath, arrayOfPaths) {
     files.forEach(function(file) {
       if (fs.statSync(dirPath + "/" + file).isDirectory() && !ignoreDirs.includes(file)) {
         arrayOfPaths = getAllPaths(dirPath + "/" + file, arrayOfPaths);
-      } else if (file === 'spec.yaml') {
+      } else if (file === 'model_card.yaml') {
         arrayOfPaths.push(path.join(dirPath, "/", file));
       }
     });
