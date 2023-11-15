@@ -82,11 +82,11 @@ paths.forEach(function(filePath) {
         'Model_details', 'Intended_use', 'Factors', 'Metrics', 'Evaluation Data', 'Training Data', 'Quantitative Analyses', 'Ethical Considerations', 'Caveats and Recommendations'
     ];
 
-    modelCardFields.forEach(field => {
-        if (!models[combined_name][field]) {
-            models[combined_name][field] = 'Information not provided.';
-        }
-    });
+    for (const field of modelCardFields) {
+      if (models[combined_name][field] === '') {
+        models[combined_name][field] = 'Information not provided.';
+      }
+    }
 
     // Create model pages
     const permalink = `/${org}/${modelName}/${version}/${modelType}/`;
