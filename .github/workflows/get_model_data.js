@@ -100,7 +100,7 @@ version: ${version}
 modelType: ${modelType}
 ---
 `;
-    const filename = `./trained-models-template/docs/_pages/${combined_name}.markdown`;
+    const filename = `./trained-models-template/Modeldocs/_pages/${combined_name}.markdown`;
     fs.writeFile(filename, page, "utf8", err => {
         if (err) console.log(err);
     });
@@ -108,11 +108,11 @@ modelType: ${modelType}
 
 // Write to files
 const yamlNames = yaml.dump(names);
-fs.writeFile("./trained-models-template/docs/_data/names.yml", yamlNames, "utf8", err => {
+fs.writeFile("./trained-models-template/Modeldocs/_data/names.yml", yamlNames, "utf8", err => {
     if (err) console.log(err);
 });
 
 const yamlModels = yaml.dump(models);
-fs.writeFile("./trained-models-template/docs/_data/models.yml", yamlModels, "utf8", err => {
+fs.writeFile("./trained-models-template/Modeldocs/_data/models.yml", yamlModels, "utf8", err => {
     if (err) console.log(err);
 });
