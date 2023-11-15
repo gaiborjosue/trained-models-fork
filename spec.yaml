@@ -1,0 +1,43 @@
+#### container info
+image:
+  singularity: [Singularity image]
+  docker: [docker image path]
+
+#### repository info
+repository:  
+    repo_url:
+    committish:
+    repo_download:
+    repo_download_location:
+
+#### Training Data Characteristics
+training_data_info:
+  data_number:
+    total: [Total number of data goes here]
+    train: [Number of training data goes here]
+    evaluate: [Number of evaluation data goes here]
+    test: [Number of test data goes here]
+  biological_sex:
+    male: [Number of male data goes here]
+    female: [Number of female data goes here]
+  age_histogram: [Age histogram goes here]
+  race: [Race information goes here]
+  imaging_contrast_info: [Imaging contrast information goes here]
+  dataset_sources: [Dataset sources go here]
+  data_sites:
+    number_of_sites: [Number of data sites goes here]
+    sites: [List of data site names goes here]
+  scanner_models: [Scanner models go here]
+  hardware: [Hardware information goes here]
+  training_parameters:
+    input_shape: [Input shape used for training goes here]
+    block_shape: [Block shape used for training goes here]
+    n_classes: [Number of classes used for training goes here]
+    lr: [Learning rate used for training goes here]
+    n_epochs: [Number of epochs used for training goes here]
+    total_batch_size: [Total batch size used for training goes here]
+    number_of_gpus: [Number of GPUs used for training goes here]
+    loss_function: [Loss function used for training goes here]
+    metrics: [List of evaluation metrics used for training goes here]
+    data_preprocessing: [Description or details about the data preprocessing steps goes here]
+    data_augmentation: [Description or details about the data augmentation techniques used goes here]

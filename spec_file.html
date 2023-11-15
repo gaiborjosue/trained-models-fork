@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<link rel="stylesheet" type="text/css" href="/trained-models/assets/styles/main.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <nav class="navbar">
+    <h1 class="nav-title">Neuronets</h1>
+    <div class="nav-menu">
+        <ul class="nav-links">
+            <li class="nav-link"><a href="/trained-models/" class="">Models</a></li>
+        </ul>
+    </div>
+</nav>
+    <main class="page-content">
+        <h1 id="the-specyaml-readme-guide">The spec.yaml ReadMe Guide</h1>
+
+<p>For a template please refer to docs/spec.yaml</p>
+
+<p>The following things should be included in your spec.yaml file</p>
+
+<ol>
+  <li>The singularity and docker image paths:
+    <ol>
+      <li><strong>For Docker:</strong>
+        <ol>
+          <li>
+            <p>Please create an image with your specified dockerfile. You can do so by running the following command:</p>
+
+            <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w"> </span><span class="n">docker</span><span class="w"> </span><span class="nx">build</span><span class="w"> </span><span class="nt">-t</span><span class="w"> </span><span class="err">&lt;</span><span class="nx">image_name</span><span class="err">&gt;</span><span class="w"> </span><span class="err">&lt;</span><span class="nx">path_to_dockerfile_directory</span><span class="err">&gt;</span><span class="w">
+</span></code></pre></div>            </div>
+          </li>
+          <li>
+            <p>Now that you have created an image you can publish it to a repository:</p>
+
+            <p>To push a Docker image to a repository, you need to follow these steps:</p>
+
+            <ol>
+              <li>
+                <p>Log in to the repository: Use the <strong><code class="language-plaintext highlighter-rouge">docker login</code></strong> command to log in to the container registry where you want to push the image. Replace <strong><code class="language-plaintext highlighter-rouge">&lt;repository&gt;</code></strong> with the URL of the registry. You will be prompted to provide your username and password or access token.</p>
+
+                <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> docker login &lt;repository&gt;
+</code></pre></div>                </div>
+              </li>
+              <li>
+                <p>Tag the image: Before pushing, you need to tag the local image with the repository URL and desired tag. Use the <strong><code class="language-plaintext highlighter-rouge">docker tag</code></strong> command with the following syntax:</p>
+
+                <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> docker tag &lt;image_name&gt; &lt;repository&gt;/&lt;image_name&gt;:&lt;tag&gt;
+</code></pre></div>                </div>
+
+                <p>Replace <strong><code class="language-plaintext highlighter-rouge">&lt;image_name&gt;</code></strong> with the name of your local image and <strong><code class="language-plaintext highlighter-rouge">&lt;repository&gt;</code></strong> with the URL of the container registry. You can specify a tag for the image, or it will default to <strong><code class="language-plaintext highlighter-rouge">latest</code></strong>.</p>
+
+                <p>For example:</p>
+
+                <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> docker tag myimage &lt;repository&gt;/myimage:latest
+</code></pre></div>                </div>
+              </li>
+              <li>
+                <p>Push the image: Once the image is tagged, you can push it to the repository using the <strong><code class="language-plaintext highlighter-rouge">docker push</code></strong> command:</p>
+
+                <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> docker push &lt;repository&gt;/&lt;image_name&gt;:&lt;tag&gt;
+</code></pre></div>                </div>
+
+                <p>Replace <strong><code class="language-plaintext highlighter-rouge">&lt;repository&gt;</code></strong>, <strong><code class="language-plaintext highlighter-rouge">&lt;image_name&gt;</code></strong>, and <strong><code class="language-plaintext highlighter-rouge">&lt;tag&gt;</code></strong> with the appropriate values. The image will be uploaded to the specified repository.</p>
+
+                <p>For example:</p>
+
+                <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> docker push &lt;repository&gt;/myimage:latest
+</code></pre></div>                </div>
+              </li>
+            </ol>
+          </li>
+          <li>
+            <p>Now that you have published that image you can add it to the spec.yaml under the image/docker key:</p>
+
+            <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w"> </span><span class="n">docker:</span><span class="w"> </span><span class="nx">docker://neuronets/nobrainer-zoo:deepcsr</span><span class="w">
+</span></code></pre></div>            </div>
+          </li>
+        </ol>
+      </li>
+      <li><strong>For singularity:</strong>
+        <ol>
+          <li>For singularity you may create an image with your docker image. You can do so by running the following:
+            <ol>
+              <li>Make sure you have Singularity installed and configured on your system.</li>
+              <li>Open a terminal or command prompt.</li>
+              <li>
+                <p>Use the following command to create a Singularity image from a Docker image:</p>
+
+                <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> singularity build &lt;output_image_file&gt; docker://&lt;docker_image&gt;
+</code></pre></div>                </div>
+
+                <p>Replace <strong><code class="language-plaintext highlighter-rouge">&lt;output_image_file&gt;</code></strong> with the desired name and path of the Singularity image file you want to create. Replace <strong><code class="language-plaintext highlighter-rouge">&lt;docker_image&gt;</code></strong> with the name of the Docker image you want to convert.</p>
+
+                <p>For example:</p>
+
+                <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> singularity build myimage.sif docker://myrepo/myimage:latest
+</code></pre></div>                </div>
+
+                <p>This command will create a Singularity image file named <strong><code class="language-plaintext highlighter-rouge">myimage.sif</code></strong> from the Docker image <strong><code class="language-plaintext highlighter-rouge">myrepo/myimage:latest</code></strong>. Ensure that you have appropriate permissions and access to the Docker image.</p>
+              </li>
+              <li>Wait for the Singularity image creation process to complete. This may take some time depending on the size and complexity of the Docker image.</li>
+            </ol>
+          </li>
+          <li>
+            <p>Now that you have created a singularity file, specifiy its path in the spec.yaml file under image/singularity:</p>
+
+            <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w"> </span><span class="n">image:</span><span class="w">
+   </span><span class="nx">singularity:</span><span class="w"> </span><span class="err">&lt;</span><span class="nx">Path_to_the_image</span><span class="err">&gt;</span><span class="w">
+   </span><span class="n">docker:</span><span class="w"> </span><span class="nx">neuronets/nobrainer-zoo:deepcsr</span><span class="w">
+</span></code></pre></div>            </div>
+          </li>
+        </ol>
+      </li>
+    </ol>
+  </li>
+  <li>Repo information (If none, then just include “None” in every repository variable).</li>
+  <li>For inference or prediction please specify the path to the <a href="http://predict.py">predict</a>.py file your model uses to work and actually output a prediction.</li>
+  <li>
+    <p>Under the same category of inference, create a command. For example:</p>
+
+    <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w"> </span><span class="kr">command</span><span class="p">:</span><span class="w"> </span><span class="n">f</span><span class="s2">"python {MODELS_PATH}/{model}/predict.py --conf_path {infile[0]}"</span><span class="w">
+</span></code></pre></div>    </div>
+
+    <p>What this command is doing is calling python, then it will autofill with the path to the <a href="http://predict.py">predict.py</a> file uploaded to the ‘<org>/<model_name>/<version>’ directory, after this it will pass any options or arguments you have detailed inside your predict.py to accept as a standard input. In the example above it inputs a config file path that will later be used, so therefore, the flag —conf_path is used. After the flag the actual ‘infile’ or user input should be passed with {} since its an f string.</version></model_name></org></p>
+
+    <p>As an example, your inference key in spec.yaml should look something like this:</p>
+
+    <div class="language-powershell highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="w"> </span><span class="n">inference:</span><span class="w">
+     </span><span class="nx">prediction_script:</span><span class="w"> </span><span class="s2">"trained-models/DeepCSR/deepcsr/1.0/predict.py"</span><span class="w">
+     </span><span class="kr">command</span><span class="p">:</span><span class="w"> </span><span class="n">f</span><span class="s2">"python {MODELS_PATH}/{model}/predict.py --conf_path {infile[0]} {outfile}"</span><span class="w">
+    
+     </span><span class="c">#### input data characteristics</span><span class="w">
+     </span><span class="n">data_spec:</span><span class="w">
+       </span><span class="nx">infile:</span><span class="w"> </span><span class="p">{</span><span class="n">n_files:</span><span class="w"> </span><span class="nx">1</span><span class="p">}</span><span class="w">
+ 			</span><span class="n">outfile:</span><span class="w"> </span><span class="p">{</span><span class="n">n_files:</span><span class="w"> </span><span class="nx">1</span><span class="p">}</span><span class="w">
+</span></code></pre></div>    </div>
+  </li>
+  <li>If you are using the template, you can remove the training keys if you are not allowing training functionalities on your model.</li>
+  <li>After that, complete the model information and help.</li>
+  <li>If you need guidance please refer to the examples provided of previous models.</li>
+</ol>
+
+    </main>
+</body>
+</html>
