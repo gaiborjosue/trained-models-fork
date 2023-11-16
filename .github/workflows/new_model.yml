@@ -41,18 +41,19 @@ jobs:
       with:
         python-version: 3.11
 
-      # Checkout the repository to the GitHub Actions runner to the new branch created for the issue 🟢
-      - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME == ''
-        with:
-          ref: issue-${{ github.event.issue.number }}
-          fetch-depth: 0
+    # Checkout the repository to the GitHub Actions runner to the new branch created for the issue 🟢
+    - uses: actions/checkout@v4
+      if: needs.create_new_branch.outputs.BRANCHNAME == ''
+      with:
+        ref: issue-${{ github.event.issue.number }}
+        fetch-depth: 0
 
-      # If branchName is empty use issue number, else, use the branchName 🟢
-      - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME != ''
-        with:
-            ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
+    # If branchName is empty use issue number, else, use the branchName 🟢
+    - uses: actions/checkout@v4
+      if: needs.create_new_branch.outputs.BRANCHNAME != ''
+      with:
+          ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
+          fetch-depth: 0
         
     # Scrape the info from the issue 🟢
     - uses: stefanbuck/github-issue-parser@v3
@@ -120,6 +121,7 @@ jobs:
         if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
             ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
+            fetch-depth: 0
 
       # Install svn to clone subdir of github repos 🟢
       - name: Install svn
@@ -209,6 +211,7 @@ jobs:
         if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
             ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
+            fetch-depth: 0
 
     # Set up Python
     - name: Set up Python
@@ -292,6 +295,7 @@ jobs:
         if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
             ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
+            fetch-depth: 0
 
 
       # Set up Python
@@ -419,6 +423,7 @@ jobs:
         if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
             ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
+            fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v4
