@@ -199,19 +199,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout the repository to the GitHub Actions runner to the new branch created for the issue 🟢
-      - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME == ''
-        with:
-          ref: issue-${{ github.event.issue.number }}
-          fetch-depth: 0
+    # Checkout the repository to the GitHub Actions runner to the new branch created for the issue 🟢
+    - uses: actions/checkout@v4
+      if: needs.create_new_branch.outputs.BRANCHNAME == ''
+      with:
+        ref: issue-${{ github.event.issue.number }}
+        fetch-depth: 0
 
-      # If branchName is empty use issue number, else, use the branchName 🟢
-      - uses: actions/checkout@v4
-        if: needs.create_new_branch.outputs.BRANCHNAME != ''
-        with:
-            ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
-            fetch-depth: 0
+    # If branchName is empty use issue number, else, use the branchName 🟢
+    - uses: actions/checkout@v4
+      if: needs.create_new_branch.outputs.BRANCHNAME != ''
+      with:
+          ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
+          fetch-depth: 0
 
     # Set up Python
     - name: Set up Python
