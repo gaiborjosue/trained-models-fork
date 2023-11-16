@@ -405,28 +405,18 @@ jobs:
       # - name: Convert docker image to singularity image
       #   run: |
       #     singularity build ./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.sif docker-archive://./${{ needs.create_new_branch.outputs.MODELPATH }}/docker/${{ needs.build-docker.outputs.MODELNAME }}.tar
-
-      # Install datalad 🟢
-      - name: Install Datalad
-        id: testing
-        run: |
-          sudo apt-get install datalad
-          python3 -m pip install datalad-osf
-          pip install requests
-          git config --global user.name "trained_models"
-          git config --global user.email "trained_models"
           
       # Datalad get the sample dataset
       - name: Get sample dataset
         run: |
-          # sudo apt install python3-pip -y
-          # sudo apt-get install datalad -y
-          # python3 -m pip install datalad-osf
-          # sudo python3 -m pip install datalad-installer
-          # datalad-installer --sudo ok git-annex -m datalad/git-annex:release
-          # sudo git config --global filter.annex.process "git-annex filter-process"
-          #     git config --system user.name "trained_models"
-          #     git config --system user.email "trained_models"
+          sudo apt install python3-pip -y
+          sudo apt-get install datalad -y
+          python3 -m pip install datalad-osf
+          sudo python3 -m pip install datalad-installer
+          datalad-installer --sudo ok git-annex -m datalad/git-annex:release
+          sudo git config --global filter.annex.process "git-annex filter-process"
+          git config --system user.name "trained_models"
+          git config --system user.email "trained_models"
           datalad get ./${{ needs.create_new_branch.outputs.MODELPATH }}/weights/
           datalad get ./${{ needs.create_new_branch.outputs.MODELPATH }}/example-data/
           sudo apt install unzip
@@ -435,7 +425,7 @@ jobs:
           # Push the dataset to the repo
           datalad save . -m "Added sample data"
 
-          datalad push --to osf-annex5-storage
+          #datalad push --to osf-annex5-storage
           datalad push --to origin
           
       # - name: Get the weights

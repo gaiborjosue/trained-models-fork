@@ -2,7 +2,7 @@ name: Get Model Data
 
 on:
   push:
-    branches: ["master"]
+    branches: ["test"]
     
 jobs:
   build:
