@@ -41,10 +41,18 @@ jobs:
       with:
         python-version: 3.11
 
-    # Checkout the repository to the GitHub Actions runner 🟢
-    - uses: actions/checkout@v4
-      with:
-        ref: ${{ steps.branch.outputs.branchName }}
+      # Checkout the repository to the GitHub Actions runner to the new branch created for the issue 🟢
+      - uses: actions/checkout@v4
+        if: needs.create_new_branch.outputs.BRANCHNAME == ''
+        with:
+          ref: issue-${{ github.event.issue.number }}
+          fetch-depth: 0
+
+      # If branchName is empty use issue number, else, use the branchName 🟢
+      - uses: actions/checkout@v4
+        if: needs.create_new_branch.outputs.BRANCHNAME != ''
+        with:
+            ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
         
     # Scrape the info from the issue 🟢
     - uses: stefanbuck/github-issue-parser@v3
@@ -102,6 +110,14 @@ jobs:
     steps:
       # Checkout the repository to the GitHub Actions runner to the new branch created for the issue 🟢
       - uses: actions/checkout@v4
+        if: needs.create_new_branch.outputs.BRANCHNAME == ''
+        with:
+          ref: issue-${{ github.event.issue.number }}
+          fetch-depth: 0
+
+      # If branchName is empty use issue number, else, use the branchName 🟢
+      - uses: actions/checkout@v4
+        if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
             ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
 
@@ -181,11 +197,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    # Checkout the repository to the GitHub Actions runner 🟢
-    # If branchName is empty use issue number, else, use the branchName 🟢
-    - uses: actions/checkout@v4
-      with:
-          ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
+      # Checkout the repository to the GitHub Actions runner to the new branch created for the issue 🟢
+      - uses: actions/checkout@v4
+        if: needs.create_new_branch.outputs.BRANCHNAME == ''
+        with:
+          ref: issue-${{ github.event.issue.number }}
+          fetch-depth: 0
+
+      # If branchName is empty use issue number, else, use the branchName 🟢
+      - uses: actions/checkout@v4
+        if: needs.create_new_branch.outputs.BRANCHNAME != ''
+        with:
+            ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
 
     # Set up Python
     - name: Set up Python
@@ -258,11 +281,17 @@ jobs:
 
     steps:
       # Checkout the repository to the GitHub Actions runner to the new branch created for the issue 🟢
+      - uses: actions/checkout@v4
+        if: needs.create_new_branch.outputs.BRANCHNAME == ''
+        with:
+          ref: issue-${{ github.event.issue.number }}
+          fetch-depth: 0
+
       # If branchName is empty use issue number, else, use the branchName 🟢
       - uses: actions/checkout@v4
+        if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
-          ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
-          fetch-depth: 0
+            ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
 
 
       # Set up Python
@@ -378,8 +407,16 @@ jobs:
           large-packages: true
           docker-images: false
         
+      # Checkout the repository to the GitHub Actions runner to the new branch created for the issue 🟢
+      - uses: actions/checkout@v4
+        if: needs.create_new_branch.outputs.BRANCHNAME == ''
+        with:
+          ref: issue-${{ github.event.issue.number }}
+          fetch-depth: 0
+
       # If branchName is empty use issue number, else, use the branchName 🟢
       - uses: actions/checkout@v4
+        if: needs.create_new_branch.outputs.BRANCHNAME != ''
         with:
             ref: ${{ needs.create_new_branch.outputs.BRANCHNAME }}
 
